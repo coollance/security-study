@@ -10,8 +10,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Date;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,5 +73,20 @@ public class UserControllerTest {
     public void whenGetInfoFail() throws Exception {
         mockMvc.perform(get("/user/a").contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void whenCreateSuccess() throws Exception {
+        Date date = new Date();
+        System.out.println(date.getTime());
+        String content = "{\"username\":\"coolance\",\"password\":null,\"birthday\":" + date.getTime() + "}";
+        String result = mockMvc.perform(post("/user").contentType(APPLICATION_JSON_UTF8).content(content))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        System.out.println(result);
     }
 }
