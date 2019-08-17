@@ -84,11 +84,11 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable("id") String id) {
         throw new UserNotExistException(id);
-        /*
-        System.out.println("id:" + id);
+/*
+        System.out.println("UserController.getInfo()");
         User user = new User();
         user.setUsername("coolance");
         return user;
-        */
+*/
     }
 }
