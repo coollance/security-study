@@ -2,6 +2,7 @@ package com.coolance.web.controller;
 
 import com.coolance.dto.User;
 import com.coolance.dto.UserQueryCondition;
+import com.coolance.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -50,12 +51,12 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user, BindingResult errors) {
-
+    public User create(@Valid @RequestBody User user/*, BindingResult errors*/) {
+        /*
         if(errors.hasErrors()) {
             errors.getAllErrors().stream().forEach(error -> System.out.println(error.getDefaultMessage()));
         }
-
+        */
         System.out.println(user.getId());
         System.out.println(user.getUsername());
         System.out.println(user.getPassword());
@@ -82,9 +83,12 @@ public class UserController {
     @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable("id") String id) {
+        throw new UserNotExistException(id);
+        /*
         System.out.println("id:" + id);
         User user = new User();
         user.setUsername("coolance");
         return user;
+        */
     }
 }
