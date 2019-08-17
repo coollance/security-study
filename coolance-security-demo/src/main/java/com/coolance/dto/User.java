@@ -1,5 +1,7 @@
 package com.coolance.dto;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 /**
  * @ClassName User
  * @Description TODO
@@ -8,9 +10,14 @@ package com.coolance.dto;
  * @Date 2019/8/17 8:56
  */
 public class User {
+
+    public interface UserSimpleView {};
+    public interface UserDetailView extends UserSimpleView {};
+
     private String username;
     private String password;
 
+    @JsonView(UserSimpleView.class)
     public String getUsername() {
         return username;
     }
@@ -19,6 +26,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonView(UserDetailView.class)
     public String getPassword() {
         return password;
     }
