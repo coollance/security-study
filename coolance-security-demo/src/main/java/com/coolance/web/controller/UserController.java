@@ -4,6 +4,8 @@ import com.coolance.dto.User;
 import com.coolance.dto.UserQueryCondition;
 import com.coolance.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
@@ -67,6 +69,7 @@ public class UserController {
 
     @GetMapping
     @JsonView(User.UserSimpleView.class)
+    @ApiOperation(value = "用户查询服务", notes = "查询用户")
     public List<User> query(UserQueryCondition condition,
                             @PageableDefault(page = 2, size = 17, sort = "username,asc") Pageable pageable) {
         System.out.println(ReflectionToStringBuilder.toString(condition, ToStringStyle.MULTI_LINE_STYLE));
@@ -82,7 +85,8 @@ public class UserController {
 
     @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable("id") String id) {
+    @ApiOperation(value = "根据id查询用户服务")
+    public User getInfo(@ApiParam(value = "用户id")@PathVariable("id") String id) {
         //throw new UserNotExistException(id);
         System.out.println(System.getProperty("user.dir"));
         System.out.println("UserController.getInfo()");

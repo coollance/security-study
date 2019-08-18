@@ -3,6 +3,8 @@
  */
 package com.coolance.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author Coolance
  *
@@ -10,8 +12,10 @@ package com.coolance.dto;
 public class UserQueryCondition {
 	
 	private String username;
-	
+
+	@ApiModelProperty(value = "用户年龄起始值")
 	private int age;
+	@ApiModelProperty(value = "用户年龄终止值")
 	private int ageTo;
 	
 	private String xxx;
