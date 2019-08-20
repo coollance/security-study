@@ -14,4 +14,5 @@ public class BrowserProperties {
 
     private String loginPage = "/coolance-signIn.html";
 
+    private LoginResponseType loginResponseType = LoginResponseType.JSON;
 }
