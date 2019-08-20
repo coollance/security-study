@@ -2,7 +2,6 @@ package com.coolance.web.controller;
 
 import com.coolance.dto.User;
 import com.coolance.dto.UserQueryCondition;
-import com.coolance.exception.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -10,6 +9,9 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @GetMapping("/me")
+    public Authentication getCurrentUser(Authentication authentication) {
+        return authentication;
+        //return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    @GetMapping("/principal")
+    public UserDetails getCurrentUser(@AuthenticationPrincipal UserDetails user) {
+        return user;
+    }
 
     @DeleteMapping("/{id:\\d+}")
     public void delete(@PathVariable("id") String id) {
