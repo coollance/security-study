@@ -1,6 +1,8 @@
 package com.coolance.security.browser;
 
 
+import com.coolance.core.properties.SecurityProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private SecurityProperties securityProperties;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -29,12 +34,22 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         //http.httpBasic();
         //使用表单登录
         http.formLogin()
+                //自定义登录页面
+                .loginPage("/authentication/require")
+                //自定义表单提交请求
+                .loginProcessingUrl("/authentication/form")
                 .and()
                 //授权相关配置
                 .authorizeRequests()
+                //设置白名单
+                .antMatchers("/authentication/require",
+                        securityProperties.getBrowser().getLoginPage()).permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证
-                .authenticated();
+                .authenticated()
+                .and()
+                //跨域请求伪造
+                .csrf().disable();
     }
 }
