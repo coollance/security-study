@@ -2,6 +2,7 @@ package com.coolance.security.browser.authentication;
 
 import com.coolance.core.properties.LoginResponseType;
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.security.browser.support.SimpleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CoolanceAuthenticationFailureHandler extends SimpleUrlAuthenticatio
         if(LoginResponseType.JSON.equals(securityProperties.getBrowser().getLoginResponseType())) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType("application/json;charset=utf-8");
-            response.getWriter().write(objectMapper.writeValueAsString(e));
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(e.getMessage())));
         } else {
             super.onAuthenticationFailure(request, response, e);
         }

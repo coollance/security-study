@@ -2,6 +2,7 @@ package com.coolance.security.browser;
 
 
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.validator.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @ClassName BrowserSecurityConfig
@@ -38,10 +40,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        ValidateCodeFilter filter = new ValidateCodeFilter(coolanceAuthenticationFailureHandler);
         //使用默认方式登录
         //http.httpBasic();
         //使用表单登录
-        http.formLogin()
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin()
                 //自定义登录页面
                 .loginPage("/authentication/require")
                 //自定义表单提交请求
@@ -53,7 +57,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //设置白名单
                 .antMatchers("/authentication/require",
-                        securityProperties.getBrowser().getLoginPage()).permitAll()
+                        securityProperties.getBrowser().getLoginPage(),
+                        "/code/image").permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证

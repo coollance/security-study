@@ -9,8 +9,8 @@ spring:
 #security:
 #  basic:
 #    enabled: false
-coolance:
-  security:
-    browser:
+#coolance:
+#  security:
+#    browser:
 #      loginPage: /demo-signIn.html
-      loginResponseType: REDIRECT
+#      loginResponseType: REDIRECT
