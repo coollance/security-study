@@ -40,7 +40,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter filter = new ValidateCodeFilter(coolanceAuthenticationFailureHandler);
+        ValidateCodeFilter filter = new ValidateCodeFilter();
+        filter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
+        filter.setSecurityProperties(securityProperties);
+        filter.afterPropertiesSet();
         //使用默认方式登录
         //http.httpBasic();
         //使用表单登录
