@@ -2,7 +2,7 @@ package com.coolance.security.browser;
 
 
 import com.coolance.core.properties.SecurityProperties;
-import com.coolance.core.validator.code.ValidateCodeFilter;
+import com.coolance.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -85,7 +85,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 //设置白名单
                 .antMatchers("/authentication/require",
                         securityProperties.getBrowser().getLoginPage(),
-                        "/code/image").permitAll()
+                        "/code/*").permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证

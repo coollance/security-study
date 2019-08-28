@@ -1,30 +1,31 @@
-package com.coolance.core.validator.code;
+package com.coolance.core.validate.code;
 
 import lombok.Data;
 
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
- * @ClassName ImageCode
- * @Description 图片验证码包装类
+ * @ClassName ValidateCode
+ * @Description 验证码实体类
  * @Author Coolance
  * @Version
- * @Date 2019/8/20 20:57
+ * @Date 2019/8/27 20:58
  */
 @Data
-public class ImageCode {
-
-    private BufferedImage image;
+public class ValidateCode {
 
     private String code;
 
     private LocalDateTime expiredTime;
 
-    public ImageCode(BufferedImage image, String code, int expiredIn) {
-        this.image = image;
+    public ValidateCode(String code, int expiredIn) {
         this.code = code;
         this.expiredTime = LocalDateTime.now().plusSeconds(expiredIn);
+    }
+
+    public ValidateCode(String code, LocalDateTime expiredTime) {
+        this.code = code;
+        this.expiredTime = expiredTime;
     }
 
     public boolean isExpired() {

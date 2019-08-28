@@ -1,6 +1,8 @@
-package com.coolance.core.validator.code;
+package com.coolance.core.validate.code;
 
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.validate.code.sms.DefaultSmsCodeSender;
+import com.coolance.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -24,5 +26,11 @@ public class ValidateCodeBeanConfig {
         ImageCodeGenerator imageCodeGenerator = new ImageCodeGenerator();
         imageCodeGenerator.setSecurityProperties(securityProperties);
         return imageCodeGenerator;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SmsCodeSender.class)
+    public SmsCodeSender smsCodeSender() {
+        return new DefaultSmsCodeSender();
     }
 }

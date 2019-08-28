@@ -1,4 +1,4 @@
-package com.coolance.core.validator.code;
+package com.coolance.core.validate.code;
 
 import com.coolance.core.properties.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
@@ -72,9 +72,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * todo 将移到ValidateCodeProcessor
+     * @param request
+     */
     private void validate(ServletWebRequest request) {
 
-        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeController.SESSION_KEY);
+        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX);
 
         String codeInRequest;
         try {
@@ -93,7 +97,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         }
 
         if (codeInSession.isExpired()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeController.SESSION_KEY);
+            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX);
             throw new ValidateCodeException("验证码已过期");
         }
 
@@ -101,7 +105,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
             throw new ValidateCodeException("验证码不匹配");
         }
 
-        sessionStrategy.removeAttribute(request, ValidateCodeController.SESSION_KEY);
+        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX);
     }
 
     public AuthenticationFailureHandler getAuthenticationFailureHandler() {

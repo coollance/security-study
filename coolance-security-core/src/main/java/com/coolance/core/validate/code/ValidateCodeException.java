@@ -1,4 +1,4 @@
-package com.coolance.core.validator.code;
+package com.coolance.core.validate.code;
 
 import org.springframework.security.core.AuthenticationException;
 
