@@ -1,12 +1,13 @@
 package com.coolance.core.validate.code.impl;
 
-import com.coolance.core.validate.code.ValidateCode;
-import com.coolance.core.validate.code.ValidateCodeGenerator;
-import com.coolance.core.validate.code.ValidateCodeProcessor;
+import com.coolance.core.properties.SecurityConstants;
+import com.coolance.core.validate.code.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Map;
@@ -64,7 +65,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
      * @return
      */
     private String getProcessorType(ServletWebRequest request) {
-        return StringUtils.substringAfter(request.getRequest().getRequestURI(), "/code/");
+        return StringUtils.substringAfter(request.getRequest().getRequestURI(), SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX);
     }
 
     /**
@@ -75,4 +76,64 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
      * @throws Exception
      */
     protected abstract void send(ServletWebRequest request, C validateCode) throws Exception;
+
+    /**
+     * 根据请求的url获取校验码的类型
+     *
+     * @return
+     */
+    private ValidateCodeType getValidateCodeType() {
+        String type = StringUtils.substringBefore(getClass().getSimpleName(), "CodeProcessor");
+        return ValidateCodeType.valueOf(type.toUpperCase());
+    }
+
+    /**
+     * @param request
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public void validate(ServletWebRequest request) {
+
+        ValidateCodeType processorType = getValidateCodeType();
+
+        String sessionKey = getSessionKey();
+
+        C codeInSession = (C) sessionStrategy.getAttribute(request, sessionKey);
+
+        String codeInRequest;
+        try {
+            codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
+                    processorType.getParamNameOnValidate());
+        } catch (ServletRequestBindingException e) {
+            throw new ValidateCodeException("获取验证码的值失败");
+        }
+
+        if (StringUtils.isBlank(codeInRequest)) {
+            throw new ValidateCodeException(processorType + "验证码的值不能为空");
+        }
+
+        if (codeInSession == null) {
+            throw new ValidateCodeException(processorType + "验证码不存在");
+        }
+
+        if (codeInSession.isExpired()) {
+            sessionStrategy.removeAttribute(request, sessionKey);
+            throw new ValidateCodeException(processorType + "验证码已过期");
+        }
+
+        if (!StringUtils.equals(codeInSession.getCode(), codeInRequest)) {
+            throw new ValidateCodeException(processorType + "验证码不匹配");
+        }
+
+        sessionStrategy.removeAttribute(request, sessionKey);
+    }
+
+    /**
+     * 构建验证码放入session时的key
+     *
+     * @return
+     */
+    private String getSessionKey() {
+        return SESSION_KEY_PREFIX + getValidateCodeType().toString().toUpperCase();
+    }
 }

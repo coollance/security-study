@@ -1,9 +1,12 @@
 package com.coolance.security.browser;
 
 
+import com.coolance.core.authentication.AbstractChannelSecurityConfig;
 import com.coolance.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.coolance.core.properties.SecurityConstants;
 import com.coolance.core.properties.SecurityProperties;
 import com.coolance.core.validate.code.ValidateCodeFilter;
+import com.coolance.core.validate.code.ValidateCodeSecurityConfig;
 import com.coolance.core.validate.code.sms.SmsCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,22 +32,19 @@ import javax.sql.DataSource;
  * @Date 2019/8/19 12:48
  */
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private SecurityProperties securityProperties;
-
-    @Autowired
-    private AuthenticationSuccessHandler coolanceAuthenticationSuccessHandler;
-
-    @Autowired
-    private AuthenticationFailureHandler coolanceAuthenticationFailureHandler;
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -64,27 +64,14 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
+        applyPasswordAuthenticationConfig(http);
 
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
-        smsCodeFilter.setSecurityProperties(securityProperties);
-        smsCodeFilter.afterPropertiesSet();
         //使用默认方式登录
         //http.httpBasic();
         //使用表单登录
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                //自定义登录页面
-                .loginPage("/authentication/require")
-                //自定义表单提交请求
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(coolanceAuthenticationSuccessHandler)
-                .failureHandler(coolanceAuthenticationFailureHandler)
+        http.apply(validateCodeSecurityConfig)
+                .and()
+                .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 .rememberMe()
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
@@ -94,16 +81,16 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 //授权相关配置
                 .authorizeRequests()
                 //设置白名单
-                .antMatchers("/authentication/require",
+                .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         securityProperties.getBrowser().getLoginPage(),
-                        "/code/*").permitAll()
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*").permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证
                 .authenticated()
                 .and()
                 //跨域请求伪造
-                .csrf().disable()
-        .apply(smsCodeAuthenticationSecurityConfig);
+                .csrf().disable();
     }
 }

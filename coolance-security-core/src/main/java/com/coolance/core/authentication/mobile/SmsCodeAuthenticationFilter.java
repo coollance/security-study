@@ -1,5 +1,7 @@
 package com.coolance.core.authentication.mobile;
 
+import com.coolance.core.properties.SecurityConstants;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,19 +21,18 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public static final String COOLANCE_FORM_MOBILE_KEY = "mobile";
+    private String mobileParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 
-    private String mobileParameter = COOLANCE_FORM_MOBILE_KEY;
     private boolean postOnly = true;
 
     public SmsCodeAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
+        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, "POST"));
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        if (postOnly && !request.getMethod().equals("POST")) {
+        if (postOnly && !request.getMethod().equals(HttpMethod.POST.name())) {
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
@@ -80,8 +81,8 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
      *
      * @param mobileParameter the parameter name. Defaults to "mobile".
      */
-    public void setUsernameParameter(String mobileParameter) {
-        Assert.hasText(mobileParameter, "Username parameter must not be empty or null");
+    public void setMobileParameter(String mobileParameter) {
+        Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
         this.mobileParameter = mobileParameter;
     }
 
