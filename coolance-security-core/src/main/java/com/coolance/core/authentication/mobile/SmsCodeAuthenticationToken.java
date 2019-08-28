@@ -7,13 +7,13 @@ import org.springframework.security.core.SpringSecurityCoreVersion;
 import java.util.Collection;
 
 /**
- * @ClassName SmsAuthenticationToken
+ * @ClassName SmsCodeAuthenticationToken
  * @Description 短信认证令牌
  * @Author Coolance
  * @Version
  * @Date 2019/8/28 11:34
  */
-public class SmsAuthenticationToken extends AbstractAuthenticationToken {
+public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
@@ -24,7 +24,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
      * <code>UsernamePasswordAuthenticationToken</code>, as the {@link #isAuthenticated()}
      * will return <code>false</code>.
      */
-    public SmsAuthenticationToken(String mobile) {
+    public SmsCodeAuthenticationToken(String mobile) {
         super(null);
         this.principal = mobile;
         setAuthenticated(false);
@@ -39,7 +39,7 @@ public class SmsAuthenticationToken extends AbstractAuthenticationToken {
      * @param principal
      * @param authorities
      */
-    public SmsAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public SmsCodeAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         // must use super, as we override

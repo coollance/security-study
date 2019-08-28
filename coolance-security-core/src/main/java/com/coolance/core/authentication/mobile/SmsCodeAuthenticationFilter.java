@@ -11,20 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @ClassName SmsAuthenticationFilter
+ * @ClassName SmsCodeAuthenticationFilter
  * @Description 短信验证码拦截器
  * @Author Coolance
  * @Version
  * @Date 2019/8/28 11:24
  */
-public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     public static final String COOLANCE_FORM_MOBILE_KEY = "mobile";
 
     private String mobileParameter = COOLANCE_FORM_MOBILE_KEY;
     private boolean postOnly = true;
 
-    public SmsAuthenticationFilter() {
+    public SmsCodeAuthenticationFilter() {
         super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
     }
 
@@ -44,7 +44,7 @@ public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
         mobile = mobile.trim();
 
-        SmsAuthenticationToken authRequest = new SmsAuthenticationToken(mobile);
+        SmsCodeAuthenticationToken authRequest = new SmsCodeAuthenticationToken(mobile);
 
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);
@@ -70,7 +70,7 @@ public class SmsAuthenticationFilter extends AbstractAuthenticationProcessingFil
      * set
      */
     protected void setDetails(HttpServletRequest request,
-                              SmsAuthenticationToken authRequest) {
+                              SmsCodeAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 

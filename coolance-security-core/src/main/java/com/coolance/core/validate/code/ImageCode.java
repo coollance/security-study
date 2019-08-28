@@ -17,10 +17,6 @@ public class ImageCode extends ValidateCode {
 
     private BufferedImage image;
 
-    private String code;
-
-    private LocalDateTime expiredTime;
-
     public ImageCode(BufferedImage image, String code, int expiredIn) {
         super(code, expiredIn);
         this.image = image;

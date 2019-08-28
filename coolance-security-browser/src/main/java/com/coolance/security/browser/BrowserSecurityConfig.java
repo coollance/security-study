@@ -1,8 +1,10 @@
 package com.coolance.security.browser;
 
 
+import com.coolance.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.coolance.core.properties.SecurityProperties;
 import com.coolance.core.validate.code.ValidateCodeFilter;
+import com.coolance.core.validate.code.sms.SmsCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +46,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -59,14 +64,20 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter filter = new ValidateCodeFilter();
-        filter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
-        filter.setSecurityProperties(securityProperties);
-        filter.afterPropertiesSet();
+        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
+        validateCodeFilter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
+
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setAuthenticationFailureHandler(coolanceAuthenticationFailureHandler);
+        smsCodeFilter.setSecurityProperties(securityProperties);
+        smsCodeFilter.afterPropertiesSet();
         //使用默认方式登录
         //http.httpBasic();
         //使用表单登录
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 //自定义登录页面
                 .loginPage("/authentication/require")
@@ -92,6 +103,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 //跨域请求伪造
-                .csrf().disable();
+                .csrf().disable()
+        .apply(smsCodeAuthenticationSecurityConfig);
     }
 }
