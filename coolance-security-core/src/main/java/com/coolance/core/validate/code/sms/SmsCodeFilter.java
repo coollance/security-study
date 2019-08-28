@@ -1,6 +1,10 @@
-package com.coolance.core.validate.code;
+package com.coolance.core.validate.code.sms;
 
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.validate.code.ImageCode;
+import com.coolance.core.validate.code.ValidateCode;
+import com.coolance.core.validate.code.ValidateCodeException;
+import com.coolance.core.validate.code.ValidateCodeProcessor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,13 +26,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @ClassName ValidateCodeFilter
- * @Description 图形验证码校验过滤器
+ * @ClassName SmsCodeFilter
+ * @Description 短信验证码校验过滤器
  * @Author Coolance
  * @Version
  * @Date 2019/8/21 9:15
  */
-public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     private AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -43,13 +47,15 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
-        String[] configUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getImage().getUrl(), ",");
-        if(ArrayUtils.isNotEmpty(configUrls)) {
-            for(String url : configUrls) {
+        String[] configUrls =
+                StringUtils.splitByWholeSeparatorPreserveAllTokens(securityProperties.getCode().getSms().getUrl(),
+                        ",");
+        if (ArrayUtils.isNotEmpty(configUrls)) {
+            for (String url : configUrls) {
                 urls.add(url);
             }
         }
-        urls.add("/authentication/form");
+        urls.add("/authentication/mobile");
 
     }
 
@@ -57,15 +63,15 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         boolean action = false;
-        for(String url : urls) {
-            if(pathMatcher.match(url, request.getRequestURI())) {
+        for (String url : urls) {
+            if (pathMatcher.match(url, request.getRequestURI())) {
                 action = true;
             }
         }
-        if(action) {
+        if (action) {
             try {
                 validate(new ServletWebRequest(request));
-            } catch(ValidateCodeException e) {
+            } catch (ValidateCodeException e) {
                 authenticationFailureHandler.onAuthenticationFailure(request, response, e);
                 return;
             }
@@ -75,16 +81,18 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
     /**
      * todo 将移到ValidateCodeProcessor
+     *
      * @param request
      */
     private void validate(ServletWebRequest request) {
 
-        ImageCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        ValidateCode codeInSession = (ValidateCode) sessionStrategy.getAttribute(request,
+                ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
 
         String codeInRequest;
         try {
             codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
-                    "imageCode");
+                    "smsCode");
         } catch (ServletRequestBindingException e) {
             throw new ValidateCodeException("获取验证码的值失败");
         }
@@ -98,7 +106,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         }
 
         if (codeInSession.isExpired()) {
-            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+            sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
             throw new ValidateCodeException("验证码已过期");
         }
 
@@ -106,7 +114,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
             throw new ValidateCodeException("验证码不匹配");
         }
 
-        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "IMAGE");
+        sessionStrategy.removeAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
     }
 
     public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
