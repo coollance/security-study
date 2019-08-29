@@ -5,7 +5,7 @@ package com.coolance.core.validate.code.sms;
 
 import com.coolance.core.properties.SecurityConstants;
 import com.coolance.core.validate.code.ValidateCode;
-import com.coolance.core.validate.code.impl.AbstractValidateCodeProcessor;
+import com.coolance.core.validate.code.AbstractValidateCodeProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;

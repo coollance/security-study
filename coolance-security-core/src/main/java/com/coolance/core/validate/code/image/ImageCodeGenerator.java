@@ -1,6 +1,7 @@
-package com.coolance.core.validate.code;
+package com.coolance.core.validate.code.image;
 
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.validate.code.ValidateCodeGenerator;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 

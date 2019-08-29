@@ -1,6 +1,7 @@
 package com.coolance.core.validate.code;
 
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.validate.code.image.ImageCodeGenerator;
 import com.coolance.core.validate.code.sms.DefaultSmsCodeSender;
 import com.coolance.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;

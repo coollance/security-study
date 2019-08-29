@@ -3,8 +3,7 @@
  */
 package com.coolance.core.validate.code.image;
 
-import com.coolance.core.validate.code.ImageCode;
-import com.coolance.core.validate.code.impl.AbstractValidateCodeProcessor;
+import com.coolance.core.validate.code.AbstractValidateCodeProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 

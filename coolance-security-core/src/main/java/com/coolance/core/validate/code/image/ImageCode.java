@@ -1,5 +1,6 @@
-package com.coolance.core.validate.code;
+package com.coolance.core.validate.code.image;
 
+import com.coolance.core.validate.code.ValidateCode;
 import lombok.Data;
 
 import java.awt.image.BufferedImage;
