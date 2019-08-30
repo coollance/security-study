@@ -37,6 +37,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
     @Bean
     public SpringSocialConfigurer coolanceSocialSecurityConfigurer() {
         SpringSocialConfigurer socialConfigurer = new SpringSocialConfigurer();
+        //设置注册页面路径，默认为/signUp
         socialConfigurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
         return socialConfigurer;
     }

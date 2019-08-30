@@ -81,8 +81,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 //授权相关配置
                 .authorizeRequests()
                 //设置白名单
-                .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",

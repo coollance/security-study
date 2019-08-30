@@ -17,4 +17,6 @@ public class BrowserProperties {
     private LoginResponseType loginResponseType = LoginResponseType.JSON;
 
     private int rememberMeSeconds = 3600;
+
+    private String signUpUrl = "/coolance-signUp.html";
 }
