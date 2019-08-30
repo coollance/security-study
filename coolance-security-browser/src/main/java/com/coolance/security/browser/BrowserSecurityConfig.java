@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -43,6 +44,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
+    @Autowired
+    private SpringSocialConfigurer coolanceSocialSecurityConfigurer;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -67,6 +71,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
                 .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
+                .apply(coolanceSocialSecurityConfigurer)
+                .and()
                 .rememberMe()
                 .tokenValiditySeconds(securityProperties.getBrowser().getRememberMeSeconds())
                 .tokenRepository(persistentTokenRepository())
@@ -77,8 +83,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 //设置白名单
                 .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        SecurityConstants.DEFAULT_AUTHENTICATION_URL,
                         securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*").permitAll()
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
+                        securityProperties.getBrowser().getSignUpUrl(),
+                        "/user/register").permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证

@@ -12,6 +12,10 @@ import lombok.Data;
 @Data
 public class QQUserInfo {
     /**
+     * 用户的ID，与QQ号码一一对应。
+     */
+    private String openId;
+    /**
      * 	返回码
      */
     private String ret;
@@ -36,9 +40,17 @@ public class QQUserInfo {
      */
     private String year;
     /**
+     * 星座
+     */
+    private String constellation;
+    /**
      * 	用户在QQ空间的昵称。
      */
     private String nickname;
+    /**
+     * 	性别。 如果获取不到则默认返回”男”
+     */
+    private String gender;
     /**
      * 	大小为30×30像素的QQ空间头像URL。
      */
@@ -60,9 +72,13 @@ public class QQUserInfo {
      */
     private String figureurl_qq_2;
     /**
-     * 	性别。 如果获取不到则默认返回”男”
+     * 大小为100×100像素的QQ头像URL。
      */
-    private String gender;
+    private String figureurl_qq;
+    /**
+     * 头像类型。
+     */
+    private String figureurl_type;
     /**
      * 	标识用户是否为黄钻用户（0：不是；1：是）。
      */

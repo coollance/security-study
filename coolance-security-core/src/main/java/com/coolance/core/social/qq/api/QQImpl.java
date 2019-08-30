@@ -23,7 +23,9 @@ public class QQImpl extends AbstractOAuth2ApiBinding implements QQ {
     private static final String URL_GET_USER_INFO = "https://graph.qq.com/user/get_user_info?oauth_consumer_key=%s&openid=%s";
 
     private String appId;
-
+    /**
+     * 用户的ID，与QQ号码一一对应。
+     */
     private String openId;
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -46,9 +48,9 @@ public class QQImpl extends AbstractOAuth2ApiBinding implements QQ {
         QQUserInfo userInfo = null;
         try {
             userInfo = objectMapper.readValue(result, QQUserInfo.class);
+            userInfo.setOpenId(openId);
         } catch (IOException e) {
-            log.error("解析QQUserInfo失败");
-            e.printStackTrace();
+            throw new RuntimeException("解析QQUserInfo失败", e);
         }
         return userInfo;
     }
