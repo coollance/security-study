@@ -42,6 +42,16 @@ public class SocialConfig extends SocialConfigurerAdapter {
     }
 
     /**
+     *
+     * @return
+     */
+    public SpringSocialConfigurer coolanceSpringSocialConfigurer() {
+        SpringSocialConfigurer socialConfigurer = new CoolanceSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
+        socialConfigurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
+        return socialConfigurer;
+    }
+
+    /**
      * 工具类
      * 1、在注册在过程中如何拿到Spring Social的信息
      * 2、注册完成如何把业务的userId返回给Spring Social

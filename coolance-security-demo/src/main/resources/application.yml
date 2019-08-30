@@ -9,8 +9,19 @@ spring:
 #security:
 #  basic:
 #    enabled: false
-#coolance:
-#  security:
+coolance:
+  security:
+    social:
+      qq:
+        appId: 101583248
+        appSecret: 810f050efd1cb4a5079fd9ca194ff831
+#        providerId: callback.do
+#      filter-processes-url: /qqLogin
+    browser:
+      signUpUrl: /demo-signUp.html
+
+server:
+  port: 80
 #    browser:
 #      loginPage: /demo-signIn.html
 #      loginResponseType: REDIRECT
