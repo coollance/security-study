@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.validation.BindingResult;
@@ -43,13 +44,13 @@ public class UserController {
         providerSignInUtils.doPostSignUp(user.getUsername(), new ServletWebRequest(request));
     }
 
-    @GetMapping("/me")
+    @GetMapping("/me1")
     public Authentication getCurrentUser(Authentication authentication) {
         return authentication;
         //return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    @GetMapping("/principal")
+    @GetMapping("/me")
     public UserDetails getCurrentUser(@AuthenticationPrincipal UserDetails user) {
         return user;
     }

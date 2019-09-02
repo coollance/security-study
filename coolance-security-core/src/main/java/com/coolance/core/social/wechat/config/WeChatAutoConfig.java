@@ -1,8 +1,9 @@
-package com.coolance.core.social.qq.config;
+package com.coolance.core.social.wechat.config;
 
-import com.coolance.core.properties.QQProperties;
 import com.coolance.core.properties.SecurityProperties;
+import com.coolance.core.properties.WeChatProperties;
 import com.coolance.core.social.qq.connet.QQConnectionFactory;
+import com.coolance.core.social.wechat.connet.WeChatConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter;
@@ -17,15 +18,15 @@ import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import javax.sql.DataSource;
 
 /**
- * @ClassName QQAutoConfig
- * @Description QQ登录配置类
+ * @ClassName WeChatAutoConfig
+ * @Description 微信登录配置类
  * @Author Coolance
  * @Version
- * @Date 2019/8/29 15:04
+ * @Date 2019/9/2 09:34
  */
 @Configuration
-@ConditionalOnProperty(prefix = "coolance.security.social.qq", name = "appId")
-public class QQAutoConfig extends SocialAutoConfigurerAdapter {
+@ConditionalOnProperty(prefix = "coolance.security.social.weChat", name = "appId")
+public class WeChatAutoConfig extends SocialAutoConfigurerAdapter {
 
     @Autowired
     private SecurityProperties securityProperties;
@@ -38,8 +39,8 @@ public class QQAutoConfig extends SocialAutoConfigurerAdapter {
 
     @Override
     protected ConnectionFactory<?> createConnectionFactory() {
-        QQProperties qqConfig = securityProperties.getSocial().getQq();
-        return new QQConnectionFactory(qqConfig.getProviderId(), qqConfig.getAppId(), qqConfig.getAppSecret());
+        WeChatProperties weChatConfig = securityProperties.getSocial().getWeChat();
+        return new WeChatConnectionFactory(weChatConfig.getProviderId(), weChatConfig.getAppId(), weChatConfig.getAppSecret());
     }
 
     /**

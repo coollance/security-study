@@ -9,6 +9,7 @@ import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInUtils;
@@ -34,7 +35,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
      * 将SocialAuthenticationFilter配置到Spring Security过滤器链上的配置类
      * @return
      */
-    @Bean
+    //@Bean
     public SpringSocialConfigurer coolanceSocialSecurityConfigurer() {
         SpringSocialConfigurer socialConfigurer = new SpringSocialConfigurer();
         //设置注册页面路径，默认为/signUp
@@ -46,6 +47,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
      *
      * @return
      */
+    @Bean
     public SpringSocialConfigurer coolanceSpringSocialConfigurer() {
         SpringSocialConfigurer socialConfigurer = new CoolanceSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
         socialConfigurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
@@ -57,11 +59,12 @@ public class SocialConfig extends SocialConfigurerAdapter {
      * 1、在注册在过程中如何拿到Spring Social的信息
      * 2、注册完成如何把业务的userId返回给Spring Social
      * @param connectionFactoryLocator
-     * @param usersConnectionRepository
      * @return
      */
     @Bean
-    public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository) {
+    public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator,
+                                                   UsersConnectionRepository usersConnectionRepository) {
         return new ProviderSignInUtils(connectionFactoryLocator, usersConnectionRepository);
     }
+
 }

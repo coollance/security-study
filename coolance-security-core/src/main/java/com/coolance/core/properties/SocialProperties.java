@@ -14,4 +14,7 @@ public class SocialProperties {
     private QQProperties qq = new QQProperties();
 
     private String filterProcessesUrl = "/auth";
+
+    private WeChatProperties weChat = new WeChatProperties();
+
 }
