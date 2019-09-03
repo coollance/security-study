@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -22,7 +24,7 @@ import javax.sql.DataSource;
 /**
  * @ClassName BrowserSecurityConfig
  * @Description 浏览器访问安全配置类
- * @Author Coolance
+ * @Author CoolanceExpiredSessionStrategy
  * @Version
  * @Date 2019/8/19 12:48
  */
@@ -47,11 +49,16 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SpringSocialConfigurer coolanceSocialSecurityConfigurer;
 
+    @Autowired
+    private InvalidSessionStrategy coolanceInvalidSessionStrategy;
+
+    @Autowired
+    private SessionInformationExpiredStrategy coolanceExpiredSessionStrategy;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
-//        tokenRepository.setCreateTableOnStartup(true);
         return tokenRepository;
     }
 
@@ -64,8 +71,6 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     protected void configure(HttpSecurity http) throws Exception {
         applyPasswordAuthenticationConfig(http);
 
-        //使用默认方式登录
-        //http.httpBasic();
         //使用表单登录
         http.apply(validateCodeSecurityConfig)
                 .and()
@@ -78,6 +83,13 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .tokenRepository(persistentTokenRepository())
                 .userDetailsService(userDetailsService)
                 .and()
+                .sessionManagement()
+                .invalidSessionStrategy(coolanceInvalidSessionStrategy)
+                .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSessions())
+                .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionsPreventsLogin())
+                .expiredSessionStrategy(coolanceExpiredSessionStrategy)
+                .and()
+                .and()
                 //授权相关配置
                 .authorizeRequests()
                 //设置白名单
@@ -86,7 +98,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
                         securityProperties.getBrowser().getSignUpUrl(),
-                        "/user/register").permitAll()
+                        "/user/register",
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl()).permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证

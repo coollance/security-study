@@ -80,4 +80,5 @@ public class BrowserSecurityController {
         userInfo.setHeadImg(connection.getImageUrl());
         return userInfo;
     }
+
 }

@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class BrowserProperties {
 
+    private SessionProperties session = new SessionProperties();
+
     private String loginPage = "/coolance-signIn.html";
 
     private LoginResponseType loginResponseType = LoginResponseType.JSON;
