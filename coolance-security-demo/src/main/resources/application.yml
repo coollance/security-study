@@ -25,6 +25,7 @@ coolance:
 #      filter-processes-url: /qqLogin
     browser:
       signUpUrl: /demo-signUp.html
+      signOutUrl: /coolance-logout.html
 
 server:
   port: 8040

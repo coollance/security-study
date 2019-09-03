@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.session.InvalidSessionStrategy;
@@ -24,7 +25,7 @@ import javax.sql.DataSource;
 /**
  * @ClassName BrowserSecurityConfig
  * @Description 浏览器访问安全配置类
- * @Author CoolanceExpiredSessionStrategy
+ * @Author Coolance
  * @Version
  * @Date 2019/8/19 12:48
  */
@@ -54,6 +55,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private SessionInformationExpiredStrategy coolanceExpiredSessionStrategy;
+
+    @Autowired
+    private LogoutSuccessHandler coolanceLogoutSuccessHandler;
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
@@ -90,6 +94,11 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .expiredSessionStrategy(coolanceExpiredSessionStrategy)
                 .and()
                 .and()
+                .logout()
+                .logoutUrl("/signOut")
+                .logoutSuccessHandler(coolanceLogoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
+                .and()
                 //授权相关配置
                 .authorizeRequests()
                 //设置白名单
@@ -99,7 +108,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
                         securityProperties.getBrowser().getSignUpUrl(),
                         "/user/register",
-                        securityProperties.getBrowser().getSession().getSessionInvalidUrl()).permitAll()
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
+                        securityProperties.getBrowser().getSignOutUrl()).permitAll()
                 //任何请求
                 .anyRequest()
                 //都需要认证
