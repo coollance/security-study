@@ -1,4 +1,4 @@
-package com.coolance.security.browser.support;
+package com.coolance.core.support;
 
 import lombok.Data;
 

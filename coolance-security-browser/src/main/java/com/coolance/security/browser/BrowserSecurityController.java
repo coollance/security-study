@@ -1,7 +1,7 @@
 package com.coolance.security.browser;
 
 import com.coolance.core.properties.SecurityProperties;
-import com.coolance.security.browser.support.SimpleResponse;
+import com.coolance.core.support.SimpleResponse;
 import com.coolance.security.browser.support.SocialUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

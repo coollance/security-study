@@ -27,10 +27,6 @@ coolance:
       signUpUrl: /demo-signUp.html
       signOutUrl: /coolance-logout.html
 
-server:
-  port: 8040
-  session:
-    timeout: 600 #秒
 #    browser:
 #      loginPage: /demo-signIn.html
 #      loginResponseType: REDIRECT
@@ -39,3 +35,13 @@ server:
 #        length: 6
 #        width: 100
 #        url: /user/*
+server:
+  port: 8040
+  session:
+    timeout: 600 #秒
+
+security:
+  oauth2:
+    client:
+      clientId: coolapp
+      clientSecret: coolsecret

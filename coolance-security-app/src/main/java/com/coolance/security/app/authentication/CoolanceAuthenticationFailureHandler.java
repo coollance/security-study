@@ -1,4 +1,4 @@
-package com.coolance.security.browser.authentication;
+package com.coolance.security.app.authentication;
 
 import com.coolance.core.properties.LoginResponseType;
 import com.coolance.core.properties.SecurityProperties;

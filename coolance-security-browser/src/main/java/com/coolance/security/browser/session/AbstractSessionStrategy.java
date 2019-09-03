@@ -3,7 +3,7 @@
  */
 package com.coolance.security.browser.session;
 
-import com.coolance.security.browser.support.SimpleResponse;
+import com.coolance.core.support.SimpleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
