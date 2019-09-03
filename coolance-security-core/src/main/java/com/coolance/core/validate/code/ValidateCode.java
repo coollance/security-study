@@ -2,6 +2,7 @@ package com.coolance.core.validate.code;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  * @Date 2019/8/27 20:58
  */
 @Data
-public class ValidateCode {
+public class ValidateCode implements Serializable {
 
     private String code;
 

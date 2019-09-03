@@ -5,7 +5,9 @@ spring:
     username: root
     password: 123456
   session:
-    store-type: none
+    store-type: redis
+  redis:
+    host: 192.168.126.139
 #security:
 #  basic:
 #    enabled: false
@@ -25,7 +27,7 @@ coolance:
       signUpUrl: /demo-signUp.html
 
 server:
-  port: 80
+  port: 8040
   session:
     timeout: 600 #秒
 #    browser:
