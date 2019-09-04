@@ -1,4 +1,4 @@
-package com.coolance.core.social;
+package com.coolance.security.core.social;
 
 import org.springframework.social.security.SocialAuthenticationFilter;
 import org.springframework.social.security.SpringSocialConfigurer;
