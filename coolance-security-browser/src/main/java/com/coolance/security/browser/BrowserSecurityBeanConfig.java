@@ -4,7 +4,7 @@
 package com.coolance.security.browser;
 
 
-import com.coolance.core.properties.SecurityProperties;
+import com.coolance.security.core.properties.SecurityProperties;
 import com.coolance.security.browser.logout.CoolanceLogoutSuccessHandler;
 import com.coolance.security.browser.session.CoolanceExpiredSessionStrategy;
 import com.coolance.security.browser.session.CoolanceInvalidSessionStrategy;

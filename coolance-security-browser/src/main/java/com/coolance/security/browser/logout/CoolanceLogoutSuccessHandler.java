@@ -1,6 +1,6 @@
 package com.coolance.security.browser.logout;
 
-import com.coolance.core.support.SimpleResponse;
+import com.coolance.security.core.support.SimpleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;

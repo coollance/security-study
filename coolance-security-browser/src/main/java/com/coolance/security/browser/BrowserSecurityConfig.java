@@ -1,18 +1,16 @@
 package com.coolance.security.browser;
 
 
-import com.coolance.core.authentication.AbstractChannelSecurityConfig;
-import com.coolance.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
-import com.coolance.core.properties.SecurityConstants;
-import com.coolance.core.properties.SecurityProperties;
-import com.coolance.core.validate.code.ValidateCodeSecurityConfig;
+import com.coolance.security.core.authentication.AbstractChannelSecurityConfig;
+import com.coolance.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.coolance.security.core.properties.SecurityConstants;
+import com.coolance.security.core.properties.SecurityProperties;
+import com.coolance.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;

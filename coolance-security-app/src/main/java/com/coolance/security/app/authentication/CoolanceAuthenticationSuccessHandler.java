@@ -1,7 +1,6 @@
 package com.coolance.security.app.authentication;
 
-import com.coolance.core.properties.LoginResponseType;
-import com.coolance.core.properties.SecurityProperties;
+import com.coolance.security.core.properties.SecurityProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
