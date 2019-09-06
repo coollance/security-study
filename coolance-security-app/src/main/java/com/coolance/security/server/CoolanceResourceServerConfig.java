@@ -1,5 +1,6 @@
 package com.coolance.security.server;
 
+import com.coolance.security.app.authentication.openid.OpenIdAuthenticationSecurityConfig;
 import com.coolance.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.coolance.security.core.properties.SecurityConstants;
 import com.coolance.security.core.properties.SecurityProperties;
@@ -42,6 +43,9 @@ public class CoolanceResourceServerConfig extends ResourceServerConfigurerAdapte
     @Autowired
     private SecurityProperties securityProperties;
 
+    @Autowired
+    private OpenIdAuthenticationSecurityConfig openIdAuthenticationSecurityConfig;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.formLogin()
@@ -55,6 +59,8 @@ public class CoolanceResourceServerConfig extends ResourceServerConfigurerAdapte
                 .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 .apply(coolanceSocialSecurityConfigurer)
+                .and()
+                .apply(openIdAuthenticationSecurityConfig)
                 .and()
                 //授权相关配置
                 .authorizeRequests()
