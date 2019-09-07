@@ -1,6 +1,7 @@
 package com.coolance.security.core.social;
 
 import com.coolance.security.core.properties.SecurityProperties;
+import com.coolance.security.core.support.SocialAuthenticationFilterPostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
     @Autowired
     private SecurityProperties securityProperties;
 
+    @Autowired(required = false)
+    private SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor;
+
     /**
      * 将SocialAuthenticationFilter配置到Spring Security过滤器链上的配置类
      * @return
@@ -43,8 +47,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
      */
     @Bean
     public SpringSocialConfigurer coolanceSpringSocialConfigurer() {
-        SpringSocialConfigurer socialConfigurer = new CoolanceSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
+        CoolanceSpringSocialConfigurer socialConfigurer = new CoolanceSpringSocialConfigurer(securityProperties.getSocial().getFilterProcessesUrl());
         socialConfigurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
+        socialConfigurer.setSocialAuthenticationFilterPostProcessor(socialAuthenticationFilterPostProcessor);
         return socialConfigurer;
     }
 

@@ -1,5 +1,6 @@
 package com.coolance.security.core.social;
 
+import com.coolance.security.core.support.SocialAuthenticationFilterPostProcessor;
 import org.springframework.social.security.SocialAuthenticationFilter;
 import org.springframework.social.security.SpringSocialConfigurer;
 
@@ -13,6 +14,8 @@ import org.springframework.social.security.SpringSocialConfigurer;
 public class CoolanceSpringSocialConfigurer extends SpringSocialConfigurer {
 
     private String filterProcessesUrl;
+
+    private SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor;
 
     public CoolanceSpringSocialConfigurer(String filterProcessesUrl) {
         this.filterProcessesUrl = filterProcessesUrl;
@@ -28,6 +31,17 @@ public class CoolanceSpringSocialConfigurer extends SpringSocialConfigurer {
     protected <T> T postProcess(T object) {
         SocialAuthenticationFilter filter = (SocialAuthenticationFilter)super.postProcess(object);
         filter.setFilterProcessesUrl(filterProcessesUrl);
+        if (socialAuthenticationFilterPostProcessor != null) {
+            socialAuthenticationFilterPostProcessor.process(filter);
+        }
         return (T)filter;
+    }
+
+    public SocialAuthenticationFilterPostProcessor getSocialAuthenticationFilterPostProcessor() {
+        return socialAuthenticationFilterPostProcessor;
+    }
+
+    public void setSocialAuthenticationFilterPostProcessor(SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor) {
+        this.socialAuthenticationFilterPostProcessor = socialAuthenticationFilterPostProcessor;
     }
 }
