@@ -2,6 +2,7 @@ package com.coolance.web.controller;
 
 import com.coolance.dto.User;
 import com.coolance.dto.UserQueryCondition;
+import com.coolance.security.app.social.AppSignUpUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,9 +40,17 @@ public class UserController {
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
 
-    @PostMapping("/register")
-    public void register(User user, HttpServletRequest request) {
+    @Autowired
+    private AppSignUpUtils appSignUpUtils;
+
+    @PostMapping("/browser/register")
+    public void browserRegister(User user, HttpServletRequest request) {
         providerSignInUtils.doPostSignUp(user.getUsername(), new ServletWebRequest(request));
+    }
+
+    @PostMapping("/app/register")
+    public void appRegister(User user, HttpServletRequest request) {
+        appSignUpUtils.doPostSignUp(user.getUsername(), new ServletWebRequest(request));
     }
 
     @GetMapping("/me1")

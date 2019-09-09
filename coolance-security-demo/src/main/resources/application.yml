@@ -7,7 +7,7 @@ spring:
   session:
     store-type: redis
   redis:
-    host: 192.168.126.139
+    host: 192.168.126.140
 #security:
 #  basic:
 #    enabled: false
@@ -36,7 +36,7 @@ coolance:
 #        width: 100
 #        url: /user/*
 server:
-  port: 8040
+  port: 80
   session:
     timeout: 600 #秒
 

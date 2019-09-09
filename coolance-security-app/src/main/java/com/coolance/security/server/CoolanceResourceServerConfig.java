@@ -72,6 +72,7 @@ public class CoolanceResourceServerConfig extends ResourceServerConfigurerAdapte
                         securityProperties.getBrowser().getSignUpUrl(),
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
                         securityProperties.getBrowser().getSignOutUrl(),
+                        SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL,
                         "/user/register").permitAll()
                 //任何请求
                 .anyRequest()
