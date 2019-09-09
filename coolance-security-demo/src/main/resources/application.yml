@@ -7,7 +7,7 @@ spring:
   session:
     store-type: redis
   redis:
-    host: 192.168.126.140
+    host: 192.168.126.141
 #security:
 #  basic:
 #    enabled: false
@@ -26,6 +26,13 @@ coolance:
     browser:
       signUpUrl: /demo-signUp.html
       signOutUrl: /coolance-logout.html
+    oauth2:
+      clients[0].clientId: coolapp
+      clients[0].clientSecret: coolsecret
+      clients[0].accessTokenValidateSeconds: 3600
+
+      clients[1].clientId: test
+      clients[1].clientSecret: test
 
 #    browser:
 #      loginPage: /demo-signIn.html
@@ -40,8 +47,8 @@ server:
   session:
     timeout: 600 #秒
 
-security:
-  oauth2:
-    client:
-      clientId: coolapp
-      clientSecret: coolsecret
+#security:
+#  oauth2:
+#    client:
+#      clientId: coolapp
+#      clientSecret: coolsecret
