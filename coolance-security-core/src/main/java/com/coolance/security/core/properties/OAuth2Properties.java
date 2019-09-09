@@ -14,4 +14,9 @@ public class OAuth2Properties {
 
     private OAuth2ClientProperties[] clients = {};
 
+    /**
+     * 使用jwt时为token签名的秘钥
+     */
+    private String jwtSigningKey = "coolance";
+
 }

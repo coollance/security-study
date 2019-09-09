@@ -3,9 +3,15 @@ package com.coolance.web.controller;
 import com.coolance.dto.User;
 import com.coolance.dto.UserQueryCondition;
 import com.coolance.security.app.social.AppSignUpUtils;
+import com.coolance.security.core.properties.SecurityProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +40,7 @@ import java.util.List;
  * @Version
  * @Date 2019/8/17 8:55
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -42,6 +50,9 @@ public class UserController {
 
     @Autowired
     private AppSignUpUtils appSignUpUtils;
+
+    @Autowired
+    private SecurityProperties securityProperties;
 
     @PostMapping("/browser/register")
     public void browserRegister(User user, HttpServletRequest request) {
@@ -54,7 +65,13 @@ public class UserController {
     }
 
     @GetMapping("/me1")
-    public Authentication getCurrentUser(Authentication authentication) {
+    public Authentication getCurrentUser(Authentication authentication, HttpServletRequest request) throws UnsupportedEncodingException {
+        String header = request.getHeader("Authorization");
+        String token = StringUtils.substringAfter(header, "bearer ");
+        Claims claims = Jwts.parser().setSigningKey(securityProperties.getOauth2().getJwtSigningKey().getBytes("UTF-8"))
+                .parseClaimsJws(token).getBody();
+        log.info("--->" + claims.get("company"));
+
         return authentication;
         //return SecurityContextHolder.getContext().getAuthentication();
     }
