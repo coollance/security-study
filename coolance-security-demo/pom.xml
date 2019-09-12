@@ -12,18 +12,19 @@
     <artifactId>coolance-security-demo</artifactId>
 
     <dependencies>
-        <!--
+
         <dependency>
             <groupId>com.coolance.security</groupId>
             <artifactId>coolance-security-browser</artifactId>
             <version>${coolance.security.version}</version>
         </dependency>
-        -->
+        <!--
         <dependency>
             <groupId>com.coolance.security</groupId>
             <artifactId>coolance-security-app</artifactId>
             <version>${coolance.security.version}</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

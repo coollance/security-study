@@ -42,6 +42,6 @@ public class MyUserDetailService implements UserDetailsService, SocialUserDetail
         String password = passwordEncoder.encode("123456");
         log.info("password:" + password);
         return new SocialUser(username, password,true, true,true,true,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
+                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));
     }
 }

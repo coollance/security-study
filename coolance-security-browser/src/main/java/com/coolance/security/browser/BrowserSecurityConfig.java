@@ -9,6 +9,7 @@ import com.coolance.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -100,9 +101,10 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
                         securityProperties.getBrowser().getSignUpUrl(),
-                        "/user/register",
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
-                        securityProperties.getBrowser().getSignOutUrl()).permitAll()
+                        securityProperties.getBrowser().getSignOutUrl(),
+                        "/user/register").permitAll()
+                .antMatchers(HttpMethod.GET, "/user/*").hasRole("ADMIN")
                 //任何请求
                 .anyRequest()
                 //都需要认证
