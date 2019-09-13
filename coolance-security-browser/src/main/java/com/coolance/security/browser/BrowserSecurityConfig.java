@@ -3,13 +3,12 @@ package com.coolance.security.browser;
 
 import com.coolance.security.core.authentication.AbstractChannelSecurityConfig;
 import com.coolance.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
-import com.coolance.security.core.properties.SecurityConstants;
+import com.coolance.security.core.authorize.AuthorizeConfigManager;
 import com.coolance.security.core.properties.SecurityProperties;
 import com.coolance.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -58,6 +57,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private LogoutSuccessHandler coolanceLogoutSuccessHandler;
 
+    @Autowired
+    private AuthorizeConfigManager authorizeConfigManager;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -93,24 +95,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .logoutSuccessHandler(coolanceLogoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .and()
-                //授权相关配置
-                .authorizeRequests()
-                //设置白名单
-                .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                        SecurityConstants.DEFAULT_AUTHENTICATION_URL,
-                        securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
-                        securityProperties.getBrowser().getSignUpUrl(),
-                        securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
-                        securityProperties.getBrowser().getSignOutUrl(),
-                        "/user/register").permitAll()
-                .antMatchers(HttpMethod.GET, "/user/*").hasRole("ADMIN")
-                //任何请求
-                .anyRequest()
-                //都需要认证
-                .authenticated()
-                .and()
                 //跨域请求伪造
                 .csrf().disable();
+        authorizeConfigManager.configure(http.authorizeRequests());
     }
 }
