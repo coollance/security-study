@@ -4,10 +4,29 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
+    #连接池及重试配置，防止mysql如果8小时自动断开连接问题
+    max-active: 100
+    min-idle: 10
+    min-evictable-idle-time-millis: 1800000
+    test-on-borrow: true
+    test-on-return: true
+    test-while-idle: true
+    validation-query: select 1
   session:
-    store-type: redis
-  redis:
-    host: 192.168.126.142
+    store-type: none
+#  redis:
+#    host: 192.168.126.143
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      naming:
+      #数据库表和字段命名策略
+        implicit-strategy: com.coolance.security.rbac.repository.support.CoolanceImplicitNamingStrategy
+
 #security:
 #  basic:
 #    enabled: false
@@ -25,7 +44,9 @@ coolance:
 #      filter-processes-url: /qqLogin
     browser:
       signUpUrl: /demo-signUp.html
-      signOutUrl: /coolance-logout.html
+      signOutUrl: /demo-logout.html
+      loginResponseType: REDIRECT
+      signInSuccessUrl: /manage.html
     oauth2:
       clients[0].clientId: coolapp
       clients[0].clientSecret: coolsecret
@@ -34,9 +55,6 @@ coolance:
       clients[1].clientId: test
       clients[1].clientSecret: test
 
-#    browser:
-#      loginPage: /demo-signIn.html
-#      loginResponseType: REDIRECT
 #    code:
 #      image:
 #        length: 6

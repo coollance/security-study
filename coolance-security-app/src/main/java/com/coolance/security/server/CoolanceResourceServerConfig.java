@@ -67,7 +67,7 @@ public class CoolanceResourceServerConfig extends ResourceServerConfigurerAdapte
                 //设置白名单
                 .antMatchers(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
-                        securityProperties.getBrowser().getLoginPage(),
+                        securityProperties.getBrowser().getSignInPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "*",
                         securityProperties.getBrowser().getSignUpUrl(),
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),

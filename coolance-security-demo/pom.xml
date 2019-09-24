@@ -12,7 +12,11 @@
     <artifactId>coolance-security-demo</artifactId>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.coolance.security</groupId>
+            <artifactId>coolance-security-authorize</artifactId>
+            <version>${coolance.security.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.coolance.security</groupId>
             <artifactId>coolance-security-browser</artifactId>

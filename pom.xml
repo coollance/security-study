@@ -18,6 +18,7 @@
         <module>coolance-security-browser</module>
         <module>coolance-security-app</module>
         <module>coolance-security-demo</module>
+        <module>coolance-security-authorize</module>
     </modules>
 
     <dependencyManagement>

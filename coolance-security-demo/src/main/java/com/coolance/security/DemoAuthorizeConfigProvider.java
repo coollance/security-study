@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @Version
  * @Date 2019/9/13 9:40
  */
-@Component
+//@Component
 public class DemoAuthorizeConfigProvider implements AuthorizeConfigProvider {
 
     @Override
